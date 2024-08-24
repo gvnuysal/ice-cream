@@ -6,4 +6,9 @@ public partial class SigningPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void gotoApp_Clicked(object sender, EventArgs e)
+    {
+		Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+    }
 }
