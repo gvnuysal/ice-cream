@@ -5,7 +5,7 @@ namespace Gvn.IceCream.API.Services
 {
     public class PasswordServices
     {
-        private const int SaltSize = 10;
+        private const int SaltSize = 512;
         public (string salt, string hashedPassword) GenerateSaltedHash(string plainPassword)
         {
             if (string.IsNullOrWhiteSpace(plainPassword))

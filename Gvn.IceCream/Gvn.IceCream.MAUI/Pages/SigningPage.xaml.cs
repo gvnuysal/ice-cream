@@ -1,14 +1,19 @@
+using Gvn.IceCream.MAUI.ViewModels;
+
 namespace Gvn.IceCream.MAUI.Pages;
 
 public partial class SigningPage : ContentPage
 {
-	public SigningPage()
+	public SigningPage(AuthViewModel authViewModel)
 	{
 		InitializeComponent();
+		BindingContext = authViewModel;
 	}
 
-    private void gotoApp_Clicked(object sender, EventArgs e)
+  
+
+    private async void SignupLabel_Tapped(object sender, TappedEventArgs e)
     {
-		Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+		await Shell.Current.GoToAsync(nameof(SignupPage));
     }
 }

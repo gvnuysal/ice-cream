@@ -1,4 +1,5 @@
 using Gvn.IceCream.API.Data;
+using Gvn.IceCream.API.EndPoints;
 using Gvn.IceCream.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 builder.Services.AddTransient<TokenServices>()
-                .AddTransient<PasswordServices>();
+                .AddTransient<PasswordServices>()
+                .AddTransient<AuthServices>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,6 +50,7 @@ app.MapControllers();
 #if DEBUG
 MigrateDatabase(app.Services);
 #endif
+app.MapEndPoints();
 app.Run();
 
 static void MigrateDatabase(IServiceProvider serviceProvider)
