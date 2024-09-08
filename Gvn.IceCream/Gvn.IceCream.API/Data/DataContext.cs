@@ -18,6 +18,7 @@ public class DataContext : DbContext
         modelBuilder.Entity<IceCreamOptions>().HasKey(io => new { io.IcecreamId, io.Flavor, io.Topping });
 
         base.OnModelCreating(modelBuilder);
+        AddSeedData(modelBuilder);
     }
     private static void AddSeedData(ModelBuilder modelBuilder)
     {
@@ -132,7 +133,7 @@ public class DataContext : DbContext
             new() { IcecreamId = 1, Flavor = "Default", Topping = "Chocolate Sauce" },
             new() { IcecreamId = 2, Flavor = "Chocolate", Topping = "Default" },
             new() { IcecreamId = 2, Flavor = "Strawbery", Topping = "Whipped" },
-            new() { IcecreamId = 2, Flavor = "Chocolate", Topping = "Default" },
+            new() { IcecreamId = 2, Flavor = "Chocolate", Topping = "Muz" },
             new() { IcecreamId = 3, Flavor = "Strawberry", Topping = "Default" },
             new() { IcecreamId = 4, Flavor = "Mint", Topping = "Default" },
             new() { IcecreamId = 5, Flavor = "Cookies", Topping = "Default" },
