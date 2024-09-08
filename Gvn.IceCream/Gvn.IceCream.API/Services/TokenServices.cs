@@ -13,18 +13,36 @@ public class TokenServices
     {
         _configuration = configuration;
     }
-    public string GenerateJwt(Guid userId, string userName)
+    public static TokenValidationParameters GetTokenValidationParameters(IConfiguration configuration)
     {
-        var secucityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]!));
+        return new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = configuration["Jwt:Issuer"],
+            ValidAudience = "*",
+            IssuerSigningKey = GetSecurityKey(configuration)
+        };
+    }
+        public string GenerateJwt(Guid userId, string userName,string email,string address)
+    {
+        var secucityKey = GetSecurityKey(_configuration);
         var credentials = new SigningCredentials(secucityKey, SecurityAlgorithms.HmacSha256);
         var issuer = _configuration["Jwt:Issuer"];
         var expires=Convert.ToInt32(_configuration["Jwt:ExpireMinutes"]);
         var secretKey = _configuration["Jwt:SecretKey"];
+        Claim[] claims = new[]
+        {
+           new Claim(ClaimTypes.NameIdentifier,userId.ToString()),
+           new Claim(ClaimTypes.Name,userName),
+           new Claim(ClaimTypes.Email,email),
+           new Claim(ClaimTypes.StreetAddress,address)
+        };
         var token = new JwtSecurityToken(issuer: issuer,
             audience: "*",
-            claims:new Claim[]
-            { 
-            },
+            claims:claims,
             expires:DateTime.Now.AddMinutes(expires),
             signingCredentials: credentials);
         
@@ -32,6 +50,12 @@ public class TokenServices
 
         return jwt;
 
+    }
+    private static SymmetricSecurityKey GetSecurityKey(IConfiguration configuration)
+    {
+        var secretKey= configuration["Jwt:SecretKey"];
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
+        return securityKey;
     }
 
 }
