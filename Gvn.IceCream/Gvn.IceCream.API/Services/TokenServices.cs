@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Gvn.IceCream.Shared.Dtos;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -26,34 +27,34 @@ public class TokenServices
             IssuerSigningKey = GetSecurityKey(configuration)
         };
     }
-        public string GenerateJwt(Guid userId, string userName,string email,string address)
+    public string GenerateJwt(LoggedInUserDto user)
     {
         var secucityKey = GetSecurityKey(_configuration);
         var credentials = new SigningCredentials(secucityKey, SecurityAlgorithms.HmacSha256);
         var issuer = _configuration["Jwt:Issuer"];
-        var expires=Convert.ToInt32(_configuration["Jwt:ExpireMinutes"]);
+        var expires = Convert.ToInt32(_configuration["Jwt:ExpireMinutes"]);
         var secretKey = _configuration["Jwt:SecretKey"];
         Claim[] claims = new[]
         {
-           new Claim(ClaimTypes.NameIdentifier,userId.ToString()),
-           new Claim(ClaimTypes.Name,userName),
-           new Claim(ClaimTypes.Email,email),
-           new Claim(ClaimTypes.StreetAddress,address)
+           new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+           new Claim(ClaimTypes.Name,user.Name),
+           new Claim(ClaimTypes.Email,user.Email),
+           new Claim(ClaimTypes.StreetAddress,user.Address)
         };
         var token = new JwtSecurityToken(issuer: issuer,
             audience: "*",
-            claims:claims,
-            expires:DateTime.Now.AddMinutes(expires),
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(expires),
             signingCredentials: credentials);
-        
-        var jwt=new JwtSecurityTokenHandler().WriteToken(token);
+
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
         return jwt;
 
     }
     private static SymmetricSecurityKey GetSecurityKey(IConfiguration configuration)
     {
-        var secretKey= configuration["Jwt:SecretKey"];
+        var secretKey = configuration["Jwt:SecretKey"];
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
         return securityKey;
     }

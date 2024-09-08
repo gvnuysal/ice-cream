@@ -29,5 +29,10 @@ namespace Gvn.IceCream.API.Services
             var hash = SHA256.HashData(bytes);
             return Convert.ToBase64String(hash);
         }
+        public bool AreEqual(string plainPassword, string salt, string hashedPassword)
+        {
+            var hashedPasswordToCompare = GenerateHashedPassword(plainPassword, salt);
+            return hashedPassword == hashedPasswordToCompare;
+        }
     }
 }

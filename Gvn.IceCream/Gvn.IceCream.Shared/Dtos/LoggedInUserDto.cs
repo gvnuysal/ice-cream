@@ -7,4 +7,4 @@
 /// <param name="Name"></param>
 /// <param name="Email"></param>
 /// <param name="Address"></param>
-public record LoggedInUserDto(Guid userId,string Name,string Email,string Address);
+public record LoggedInUserDto(Guid Id,string Name,string Email,string Address);

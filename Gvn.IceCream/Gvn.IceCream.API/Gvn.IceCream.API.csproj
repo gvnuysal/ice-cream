@@ -16,4 +16,7 @@
     </PackageReference>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gvn.IceCream.Shared\Gvn.IceCream.Shared.csproj" />
+  </ItemGroup>
 </Project>
